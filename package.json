@@ -1,8 +1,8 @@
 {
-  "name": "roguemap-parser",
+  "name": "roguemap-parse-stream",
   "version": "0.1.0",
-  "description": "Reads a text map and emits an event for each character in it.",
-  "main": "parser.js",
+  "description": "Reads a text map and emits a data event for each cell in it, containing the coordinates and key.",
+  "main": "mapparserstream.js",
   "scripts": {
     "test": "mocha --ui tdd -R spec tests/maptest.js",
     "dtest": "mocha debug --ui tdd -R spec tests/maptest.js"
