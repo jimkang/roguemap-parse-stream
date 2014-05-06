@@ -1,0 +1,32 @@
+{
+  "name": "roguemap-parser",
+  "version": "0.1.0",
+  "description": "Reads a text map and emits an event for each character in it.",
+  "main": "parser.js",
+  "scripts": {
+    "test": "mocha --ui tdd -R spec tests/maptest.js",
+    "dtest": "mocha debug --ui tdd -R spec tests/maptest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jimkang/roguemap-parser.git"
+  },
+  "keywords": [
+    "parse",
+    "map",
+    "event"
+  ],
+  "author": "Jim Kang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jimkang/roguemap-parser/issues"
+  },
+  "homepage": "https://github.com/jimkang/roguemap-parser",
+  "devDependencies": {
+    "mocha": "~1.18.2"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "through2": "~0.4.1"
+  }
+}
