@@ -26,7 +26,7 @@ The module creates a [through stream](https://github.com/rvagg/through2) that re
 Installation
 ------------
 
-    npm install svgcamera
+    npm install roguemap-parse-stream
 
 Usage
 -----

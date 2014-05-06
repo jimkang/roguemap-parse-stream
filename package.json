@@ -1,6 +1,6 @@
 {
   "name": "roguemap-parse-stream",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Reads a text map and emits a data event for each cell in it, containing the coordinates and key.",
   "main": "mapparserstream.js",
   "scripts": {
