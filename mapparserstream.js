@@ -1,4 +1,4 @@
-var through2 = require('through2');
+var Transform = require('stream').Transform;
 
 function createMapParserStream() {
   var x = 0;
@@ -21,7 +21,9 @@ function createMapParserStream() {
     callback();
   }
 
-  return through2({objectMode: true}, chunkToMapEvents);
+  var stream = new Transform({objectMode: true});
+  stream._transform = chunkToMapEvents;
+  return stream;
 }
 
 module.exports = createMapParserStream;
