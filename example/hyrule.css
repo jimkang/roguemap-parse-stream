@@ -1,0 +1,302 @@
+html {
+  /* Firefox needs this. */
+  height: 100%;
+}
+
+body {
+  font-family: adobe-garamond-pro, serif;
+  font-size: 24px;
+  color: #666;
+  background-color: white;
+  margin: 2em;
+  height: 100%;
+}
+
+svg {
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+.map-node {
+  stroke: #ccc;
+  fill: hsla(0, 0%, 0%, 0.15);
+  shape-rendering: crispEdges;
+}
+
+.root-map-node {
+  fill: hsl(98, 100%, 75%);
+}
+
+.quadroot rect.selected {
+  fill: hsl(74, 100%, 60%);
+}
+
+.dot {
+  shape-rendering: crispEdges;
+  cursor: pointer;
+  fill: white;
+  stroke-width: 0px;
+  stroke: white;
+}
+
+.dot.selected {
+  fill: hsl(340, 100%, 60%);
+}
+
+.quadtreemap {
+  border-radius: 4px;
+}
+
+.quadtreetree {
+  background-color: #444;
+  border-radius: 4px;
+  float: right;
+}
+
+.quadtreetree .node circle {
+  cursor: pointer;
+  fill-opacity: 0.8;
+  stroke-width: 0px;
+  fill: hsl(98, 100%, 75%);
+}
+
+.quadtreetree .node.leaf circle {
+  fill: white;
+}
+
+.quadtreetree .node.ghost circle {
+  fill: #888;
+}
+
+.quadtreetree .new.node circle {
+}
+
+.quadtreetree .node.selected circle {
+  stroke: hsl(74, 100%, 60%);
+  stroke-width: 12px;
+  stroke-opacity: 0.55;
+}
+
+.quadtreetree .node.selected.leaf circle {
+  stroke: hsl(340, 100%, 60%);
+}
+
+.quadtreetree .node text {
+  fill: #fff;
+  stroke: none;
+}
+
+.quadtreetree .link {
+  fill: none;
+  stroke: #aaa;
+  opacity: 0.7;
+}
+
+.quadtreetree .node tspan {
+  font-size: 16px;
+}
+
+
+a {
+  font-weight: bold;
+  color: #555;
+  text-decoration: none;
+}
+
+.instructions {
+  /*background-color: hsla(55, 82%, 58%, 0.8);*/
+  color: rgb(83, 83, 83);
+  font-family: adobe-garamond-pro, serif;
+  font-size: larger;
+  padding: 0.5em;
+  margin-bottom: 0;
+  /*list-style-type: square;*/
+  border-radius: 0.3em;
+  border: 2px solid #ddd;
+}
+
+dt {
+  font-weight: 500;
+}
+
+dd {
+  font-size: smaller;
+}
+
+.aside {
+  background-color: hsla(120, 10%, 80%, 0.8);
+  padding: 1em;
+}
+
+.explanation {
+  margin-right: 0.5em;
+  font-size: larger;
+}
+
+.explanation ul {
+  /*list-style-type: square;*/
+  margin-left: -0.5em;
+}
+
+.explanation li {
+  margin-bottom: 0.4em;
+}
+
+.details-box {
+  margin: 0.5em;
+  display: none;
+}
+
+.two-bars {
+  display: flex;
+  flex-direction: row;
+  width: 100%;  
+}
+/*
+.sidebar {
+  flex: 0 0 auto;
+  order: 1;
+}
+
+.mainbar {
+  flex: 0 0 auto;
+  order: 2;
+}
+*/
+.sidebar {
+  flex: 1 1 45%;
+  order: 2;
+  background-color: hsla(65, 50%, 90%, 0.4);
+  padding-left: 1em;
+  padding-right: 1em;
+  border-radius: 0.4em;  
+}
+
+.mainbar {
+  flex: 3 0 55%;
+  order: 1;
+}
+
+
+dt.dismiss-link-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  font-size: larger;
+  margin-top: 0.3em;
+}
+
+@media all and (max-width: 586px) {
+  /* If the screen is narrow, the sidebar comes first and takes up the whole 
+  width. */
+
+  .two-bars {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sidebar {
+    flex: 0 0 auto;
+    order: 1;
+  }
+
+  .mainbar {
+    flex: 0 0 auto;
+    order: 2;
+  }  
+}
+
+.post-svg-spacer-hack {
+  margin-bottom: -1em;
+  margin-top: 0px;  
+}
+
+button {
+  margin-right: 10px;
+  margin-top: 16px;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  padding-top: 0.25em;
+  padding-bottom: 0.2em;
+
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-bottom-color: rgba(255, 255, 255, 0.9);
+  border-right-color: rgba(255, 255, 255, 0.9);
+  border-top-color: rgba(0, 0, 0, 0.1);
+  border-left-color: rgba(0, 0, 0, 0.1);
+
+  color: #504848;
+  font-family: adobe-garamond-pro, serif;
+  font-size: 24px;  
+}
+
+.orange {
+  color: hsl(38, 87%, 49%);
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: hsl(98, 100%, 75%);
+}
+
+.white {
+  color: white;
+}
+
+.reverse-highlight {
+  background-color: hsla(0, 0%, 25%, 0.9);
+  padding-top: 0.1em;
+  padding-bottom: 0.15em;
+  padding-left: 0.3em;
+  padding-right: 0.35em;
+  margin-left: -0.1em;
+  margin-right: -0.1em;
+  border-radius: 0.3em;  
+}
+
+#add-points-instructions button {
+  margin-top: 0px;
+  margin-right: 0px;
+}
+
+#add-points-instructions ul {
+  margin-top: 0;
+  margin-bottom: -1em;
+}
+
+#add-points-instructions li {
+  padding-bottom: 1em;
+}
+
+/* page footer */
+
+footer {
+  margin: 3em 0;
+}
+
+footer .nav {
+  text-align: center;
+  margin-top: 5em;
+  margin-bottom: 3.5em;
+}
+
+footer .nav a {
+  padding: 0 0.5em;
+  font-size: 1.2em;
+  text-decoration: none;
+}
+
+footer .copy {
+  text-align: center;
+  font-size: 0.7em;
+  font-style: italic;
+  margin-top: 1em;
+}
+
+footer .copy, footer .copy a {
+  color: #8e8e8e;
+}
