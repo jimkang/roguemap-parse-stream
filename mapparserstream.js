@@ -9,6 +9,7 @@ function createMapParserStream() {
       var char = chunk[i];
       if (char === '\n') {
         y += 1;
+        x = 0;
       }
       else {
         this.push({
