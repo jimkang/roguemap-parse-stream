@@ -16,6 +16,11 @@ svg {
   font-family: "Helvetica Neue", sans-serif;
 }
 
+.cell text {
+  fill: white;
+  fill-opacity: 0.7;
+}
+
 .map-node {
   stroke: #ccc;
   fill: hsla(0, 0%, 0%, 0.15);
