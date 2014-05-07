@@ -1,23 +1,9 @@
 function controller() {
-  var tileRoot = d3.select('#tilemap .tileroot');
-  tileRoot.append('rect').attr({
-    x: 10,
-    y: 10,
-    width: 100,
-    height: 100,
-    fill: 'green'
+  var renderer = createRenderer({
+    rootSelector: '#tilemap .tileroot',    
   });
 
   var cellsReceived = [];
-
-  function createMapWriteStream() {
-    var mapWriteStream = streampack.stream.Writable({objectMode: true});
-    mapWriteStream._write = function writeMapCell(cell, enc, next) {
-      cellsReceived.push(cell);
-      next();
-    };
-    return mapWriteStream;
-  }
 
   function createMockReadStream() {
     var mockReadStream = streampack.stream.Readable({objectMode: true});
@@ -37,15 +23,17 @@ function controller() {
 
   var readStream = createMockReadStream();
   var parserstream = streampack.createMapParserStream();
-  var mapwriteStream = createMapWriteStream();
   readStream.pipe(parserstream);
-  parserstream.pipe(mapwriteStream);
 
-  parserstream.on('end', function onParseEnd() {
+  parserstream.on('end', function logCells() {
     console.log(cellsReceived);
-  }
-  .bind(this));
+  });
 
+  parserstream.on('data', function updateMap(cell) {
+    cell.id = 'cell-' + cell.coords[0] + '-' + cell.coords[1];
+    cellsReceived.push(cell);
+    renderer.renderCells(cellsReceived);
+  });
 
   return {
     parserstream: parserstream
