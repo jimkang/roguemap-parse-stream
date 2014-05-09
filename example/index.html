@@ -18,14 +18,14 @@
 
 <body>
 
-<h2>Southwest Hyrule</h2>
+<h2>Hyrule West</h2>
 
 <p class="explanation">
-  Here's <a href="http://userpages.monmouth.com/~colonel/videogames/zelda2/hyrule2.html">Col. Sicherman's ASCII map</a> of Southwest Hyrule from The Adventure of Link parsed by roguemap-parse-stream, then rendered by some functions that put out SVG shapes.
+  Here's <a href="http://userpages.monmouth.com/~colonel/videogames/zelda2/hyrule2.html">Col. Sicherman's ASCII map</a> of the west of Hyrule from The Adventure of Link parsed by roguemap-parse-stream, then rendered by some functions that put out SVG shapes.
 </p>
 
-<svg id="tilemap" width="100%" height="75%">
-  <g class="tileroot"></g>
+<svg id="tilemap" width="100%" height="640">
+  <g class="tileroot" transform="scale(0.2)"></g>
 </svg>
 
 
@@ -44,6 +44,7 @@
 <script src="../mapparserstream-browserified.js"></script>
 <script src="node_modules/svgcamera/camera.js"></script>
 <script src="accessors.js"></script>
+<script src="utils.js"></script>
 <script src="renderer.js"></script>
 <script src="controller.js"></script>
 

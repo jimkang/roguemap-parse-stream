@@ -5,35 +5,63 @@ function controller() {
 
   var cellsReceived = [];
 
-  function createMockReadStream() {
-    var mockReadStream = streampack.stream.Readable({objectMode: true});
-    var mockData = ['a', 'b', 'c', 'd', 'e', 'f', '\n', 'g', 'h', 'i', 'j', 'k'];
-    var index = 0;
-    mockReadStream._read = function readChar() {
-      if (index < mockData.length) {
-        this.push(mockData[index]);
-        index += 1;
+  function createXHRCharReadStream() {
+    var readStream = streampack.stream.Readable({objectMode: true});
+
+    function pushCharsFromChunk(chunk) {
+      for (var chunkIndex = 0; chunkIndex < chunk.length; ++chunkIndex) {
+        var result = readStream.push(chunk[chunkIndex]);
+        if (!result) {
+          return result;
+        }
       }
-      else {
-        this.push(null);
-      }
+      return true;
     };
-    return mockReadStream;
+
+    var xhr = null;
+    readStream._read = function readFromXHR(size) {
+      if (!xhr) {
+        xhr = utils.makeRequest({
+          url: 'megahyrulewest.txt',
+          method: 'GET',
+          mimeType: 'text/plain',
+          onData: function onData(data) {
+            pushCharsFromChunk(data);
+          },
+          done: function useResponse(error, text) {
+            readStream.push(null);
+          }
+        });
+      }
+    }
+
+    return readStream;
   }
 
-  var readStream = createMockReadStream();
+  function createCellRenderStream() {
+    var writeStream = streampack.stream.Writable({objectMode: true});
+    writeStream._write = function writeCell(cell, enc, next) {
+      cell.id = 'cell-' + cell.coords[0] + '-' + cell.coords[1];
+      setTimeout(function doCellWritingWork() {
+        renderer.renderNewCell(cell);
+        next();
+      },
+      0);
+    };
+    writeStream.end = function wrapUp() {
+      if (cellsReceived.length > 0) {
+        renderer.renderNewCells(cellsReceived);        
+      }
+    }
+    return writeStream;
+  }
+
+  var readStream = createXHRCharReadStream();
   var parserstream = streampack.createMapParserStream();
+  var renderStream = createCellRenderStream();
+  // debugger;
   readStream.pipe(parserstream);
-
-  parserstream.on('end', function logCells() {
-    console.log(cellsReceived);
-  });
-
-  parserstream.on('data', function updateMap(cell) {
-    cell.id = 'cell-' + cell.coords[0] + '-' + cell.coords[1];
-    cellsReceived.push(cell);
-    renderer.renderCells(cellsReceived);
-  });
+  parserstream.pipe(renderStream);
 
   return {
     parserstream: parserstream
