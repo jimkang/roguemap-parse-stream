@@ -1,8 +1,10 @@
 var Transform = require('stream').Transform;
 
-function createMapParserStream() {
+function createMapParserStream(opts) {
+  var batchSize = (opts && opts.batchSize) ? opts.batchSize : 10;
   var x = 0;
   var y = 0;
+  var cells = [];
 
   function chunkToMapEvents(chunk, enc, callback) {
     for (var i = 0; i < chunk.length; ++i) {
@@ -12,18 +14,33 @@ function createMapParserStream() {
         x = 0;
       }
       else {
-        this.push({
+        cells.push({
           key: char,
           coords: [x, y]
         });
         x += 1;
+
+        if (cells.length === batchSize) {
+          // Ship it.
+          stream.push(cells.slice());
+          cells.length = 0;
+        }
       }
     }
     callback();
   }
 
+  function postRemainingCells(callback) {
+    if (cells.length > 0) {
+      this.push(cells);
+    }
+    callback();
+  }
+
   var stream = new Transform({objectMode: true});
+
   stream._transform = chunkToMapEvents;
+  stream._flush = postRemainingCells;
   return stream;
 }
 
