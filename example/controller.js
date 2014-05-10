@@ -6,60 +6,78 @@ function controller() {
   var cellsReceived = [];
 
   function createXHRCharReadStream() {
-    var readStream = streampack.stream.Readable({objectMode: true});
-
-    function pushCharsFromChunk(chunk) {
-      for (var chunkIndex = 0; chunkIndex < chunk.length; ++chunkIndex) {
-        var result = readStream.push(chunk[chunkIndex]);
-        if (!result) {
-          return result;
-        }
-      }
-      return true;
-    };
+    var readStream = streampack.stream.Readable({encoding: 'utf8'});
 
     var xhr = null;
+    var buffer = [];
+    var paused = false;
+    var xhrDone = false;
+
     readStream._read = function readFromXHR(size) {
+      paused = false;
+
       if (!xhr) {
         xhr = utils.makeRequest({
           url: 'megahyrulewest.txt',
           method: 'GET',
           mimeType: 'text/plain',
           onData: function onData(data) {
-            pushCharsFromChunk(data);
+            if (paused) {
+              buffer.push(data);
+            }
+            else {
+              paused = !readStream.push(data);
+              if (paused) {
+                console.log('XHRReadStream is paused!');
+              }
+            }
           },
-          done: function useResponse(error, text) {
-            readStream.push(null);
+          done: function onDone(error, text) {
+            xhrDone = true;
+            if (buffer.length < 1) {
+              readStream.push(null);
+            }
           }
         });
+      }
+
+      pushFromBuffer();
+      if (xhrDone && buffer.length < 1) {
+        readStream.push(null);
+      }
+    }
+
+    function pushFromBuffer() {
+      while (!paused && buffer.length > 0) {
+        paused = !readStream.push[buffer.shift()];
       }
     }
 
     return readStream;
   }
 
+  var callNextWithoutOverwhelmingBrowser = utils.space(function callNext(next) {
+    next();
+  }, 500);  
+
   function createCellRenderStream() {
     var writeStream = streampack.stream.Writable({objectMode: true});
-    writeStream._write = function writeCell(cell, enc, next) {
-      cell.id = 'cell-' + cell.coords[0] + '-' + cell.coords[1];
-      setTimeout(function doCellWritingWork() {
-        renderer.renderNewCell(cell);
-        next();
-      },
-      0);
+    writeStream._write = function writeCells(cells, enc, next) {
+      renderer.renderNewCells(cells);
+      callNextWithoutOverwhelmingBrowser(next);
     };
     writeStream.end = function wrapUp() {
-      if (cellsReceived.length > 0) {
-        renderer.renderNewCells(cellsReceived);        
-      }
+      console.log('Rendered it all!');
     }
     return writeStream;
   }
 
   var readStream = createXHRCharReadStream();
-  var parserstream = streampack.createMapParserStream();
+  var parserstream = streampack.createMapParserStream({
+    batchSize: 200
+  });
   var renderStream = createCellRenderStream();
-  // debugger;
+
   readStream.pipe(parserstream);
   parserstream.pipe(renderStream);
 
