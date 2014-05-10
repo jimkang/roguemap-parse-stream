@@ -8,59 +8,39 @@ function createRenderer(opts) {
   });
 
   var tileRoot = d3.select(opts.rootSelector);
+  var tileMap = d3.select('#tilemap');
+  var cellsRenderedCount = 0;
+  var currentMapHeight = 1000;
 
   function renderNewCells(cells) {
-    var cellRenditions = tileRoot.selectAll('.new').data(cells);    
-    var newRenditions = cellRenditions.enter().append('g');
-    newRenditions.classed('cell', true);
+    cells.forEach(renderNewCell);
 
-    newRenditions.append('rect').attr({
-      width: opts.spaceFactor,
-      height: opts.spaceFactor,
-      fill: 'blue'
-    });
-    
-    newRenditions.append('text').attr({
-      x: '1em',
-      y: '1em',
-      dy: '0.35em',
-      'text-anchor': 'middle'
-    });
-
-    newRenditions.attr('transform', function composeTransform(d) {
-      return 'translate(' + d.coords[0] * opts.spaceFactor + ',' + 
-        d.coords[1] * opts.spaceFactor + ')';
-    });
-
-    newRenditions.selectAll('text').text(accessors.key);
-
-    d3.select('#tilemap').attr('height', 
-      d3.selectAll('.cell')[0].length / 76 * opts.spaceFactor/5);
+    cellsRenderedCount += cells.length;
+    var neededHeight = cellsRenderedCount / 76 * opts.spaceFactor/5;
+    if (neededHeight > currentMapHeight) {
+      currentMapHeight += 1000;
+      tileMap.attr('height', currentMapHeight);
+    }
   }
 
   function renderNewCell(cell) {
-    var rendition = tileRoot.append('g');
-    rendition.datum(cell);
-    rendition.attr('class', 'cell');
+    var rendition = tileRoot.append('g')
     
-    rendition.append('rect').attr({
-      x: cell.coords[0] * opts.spaceFactor,
-      y: cell.coords[1] * opts.spaceFactor,
-      width: opts.spaceFactor,
-      height: opts.spaceFactor,
-      fill: 'blue'
-    });
+    rendition.append('rect')
+      .attr({
+        x: opts.spaceFactor * cell.coords[0],
+        y: opts.spaceFactor * cell.coords[1],        
+        width: opts.spaceFactor,
+        height: opts.spaceFactor,
+        class: cell.key
+      });
 
-    rendition.append('text').text(cell.key).attr({
-      x: (cell.coords[0] + 0.5) * opts.spaceFactor,
-      y: (cell.coords[1] + 0.5) * opts.spaceFactor,
-      dy: '0.35em',
-      'text-anchor': 'middle'
-    });
-
-    d3.select('#tilemap').attr('height', 
-      d3.selectAll('.cell')[0].length / 76 * opts.spaceFactor * 0.2
-    );
+    rendition.append('text')
+      .text(cell.key)
+      .attr({
+        x: opts.spaceFactor * (cell.coords[0] + 0.5),
+        y: opts.spaceFactor * (cell.coords[1] + 0.5), 
+      });        
   }
 
   return {

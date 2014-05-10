@@ -13,92 +13,15 @@ body {
 }
 
 svg {
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: "Lucida Grande", "Helvetica Neue", sans-serif;
 }
 
-.cell text {
+g text {
   fill: white;
   fill-opacity: 0.7;
+  text-anchor: middle;
 }
 
-.map-node {
-  stroke: #ccc;
-  fill: hsla(0, 0%, 0%, 0.15);
-  shape-rendering: crispEdges;
-}
-
-.root-map-node {
-  fill: hsl(98, 100%, 75%);
-}
-
-.quadroot rect.selected {
-  fill: hsl(74, 100%, 60%);
-}
-
-.dot {
-  shape-rendering: crispEdges;
-  cursor: pointer;
-  fill: white;
-  stroke-width: 0px;
-  stroke: white;
-}
-
-.dot.selected {
-  fill: hsl(340, 100%, 60%);
-}
-
-.quadtreemap {
-  border-radius: 4px;
-}
-
-.quadtreetree {
-  background-color: #444;
-  border-radius: 4px;
-  float: right;
-}
-
-.quadtreetree .node circle {
-  cursor: pointer;
-  fill-opacity: 0.8;
-  stroke-width: 0px;
-  fill: hsl(98, 100%, 75%);
-}
-
-.quadtreetree .node.leaf circle {
-  fill: white;
-}
-
-.quadtreetree .node.ghost circle {
-  fill: #888;
-}
-
-.quadtreetree .new.node circle {
-}
-
-.quadtreetree .node.selected circle {
-  stroke: hsl(74, 100%, 60%);
-  stroke-width: 12px;
-  stroke-opacity: 0.55;
-}
-
-.quadtreetree .node.selected.leaf circle {
-  stroke: hsl(340, 100%, 60%);
-}
-
-.quadtreetree .node text {
-  fill: #fff;
-  stroke: none;
-}
-
-.quadtreetree .link {
-  fill: none;
-  stroke: #aaa;
-  opacity: 0.7;
-}
-
-.quadtreetree .node tspan {
-  font-size: 16px;
-}
 
 
 a {
