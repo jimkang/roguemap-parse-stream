@@ -31,7 +31,7 @@ g text {
 }
 
 .mountain {
-  fill: #321;
+  fill: #6F6358;
 }
 
 .forest {
@@ -39,15 +39,15 @@ g text {
 }
 
 .town {
-  fill: #444;
+  fill: #BA70BD;
 }
 
 .cave {
-  fill: lightgray;
+  fill: #3C2F2F;
 }
 
 .volcano {
-  fill: purple;
+  fill: rgb(223, 58, 17);
 }
 
 .swamp {
@@ -59,7 +59,7 @@ g text {
 }
 
 .glacier {
-  fill: #ddf;
+  fill: #B6DCE4;
 }
 
 a {
