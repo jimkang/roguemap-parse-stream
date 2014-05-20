@@ -1,27 +1,35 @@
 function controller() {
   var renderer = createRenderer({
-    rootSelector: '#tilemap .tileroot',    
+    rootSelector: '#tilemap .tileroot',
+    scale: 0.2,
+    averageRowSize: 80
   });
 
   var cellsReceived = [];
 
-  function createXHRCharReadStream() {
+  function createXHRCharReadStream(url) {
     var readStream = streampack.stream.Readable({encoding: 'utf8'});
 
     var xhr = null;
     var buffer = [];
     var paused = false;
     var xhrDone = false;
+    var dataCount = 0;
 
     readStream._read = function readFromXHR(size) {
       paused = false;
-
       if (!xhr) {
         xhr = utils.makeRequest({
-          url: 'megahyrulewest.txt',
+          url: url,
           method: 'GET',
           mimeType: 'text/plain',
           onData: function onData(data) {
+            console.log('data.length', data.length);
+            if (dataCount > 1) {
+              return;
+            }
+
+            dataCount += 1;              
             if (paused) {
               buffer.push(data);
             }
@@ -56,14 +64,18 @@ function controller() {
     return readStream;
   }
 
+  var batchesRenderered = 0;
   var callNextWithoutOverwhelmingBrowser = utils.space(function callNext(next) {
+    ++batchesRenderered;
+    console.log('batchesRenderered', batchesRenderered);
     next();
   }, 500);  
 
   function createCellRenderStream() {
     var writeStream = streampack.stream.Writable({objectMode: true});
     writeStream._write = function writeCells(cells, enc, next) {
-      renderer.renderNewCells(cells);
+      cells.forEach(setUpCellId);
+      renderer.renderCells(cells);
       callNextWithoutOverwhelmingBrowser(next);
     };
     writeStream.end = function wrapUp() {
@@ -72,9 +84,13 @@ function controller() {
     return writeStream;
   }
 
-  var readStream = createXHRCharReadStream();
+  function setUpCellId(cell) {
+    cell.id = 'c' + cell.coords[0] + '-' + cell.coords[1];
+  }
+
+  var readStream = createXHRCharReadStream('bigmap.txt');
   var parserstream = streampack.createMapParserStream({
-    batchSize: 200
+    batchSize: 2500
   });
   var renderStream = createCellRenderStream();
 

@@ -10,41 +10,61 @@ function createRenderer(opts) {
   var tileRoot = d3.select(opts.rootSelector);
   var tileMap = d3.select('#tilemap');
   var cellsRenderedCount = 0;
+  var rowOffset = 0;
+  var rowSize = 80;
   var currentMapHeight = 1000;
+  var tileRenderers = createTileRenderers();
 
-  function renderNewCells(cells) {
-    cells.forEach(renderNewCell);
+  function renderCells(cells) {
+    rowOffset = -cellsRenderedCount/rowSize;
+
+    var cellRenditions = tileRoot.selectAll('.cell')
+      .data(cells, accessors.id);
+
+    var newCellRenditions = cellRenditions.enter()
+      .append('g').classed('cell', true);
+
+    newCellRenditions.append('rect').attr({
+      width: opts.spaceFactor,
+      height: opts.spaceFactor
+    });
+
+    newCellRenditions.append('text');
+
+    cellRenditions.each(updateCell);
+
+    cellRenditions.exit().remove();
 
     cellsRenderedCount += cells.length;
-    var neededHeight = cellsRenderedCount / 76 * opts.spaceFactor/5;
-    if (neededHeight > currentMapHeight) {
-      currentMapHeight += 1000;
-      tileMap.attr('height', currentMapHeight);
-    }
+    // var neededHeight = cellsRenderedCount / opts.averageRowSize * 
+    //   opts.spaceFactor * opts.scale;
+
+    // if (neededHeight > currentMapHeight) {
+    //   currentMapHeight += 1000;
+    //   tileMap.attr('height', currentMapHeight);
+    // }
   }
 
-  function renderNewCell(cell) {
-    var rendition = tileRoot.append('g')
+  function updateCell(cell) {
+    var cellRendition = d3.select(this);
     
-    rendition.append('rect')
+    var tile = cellRendition.select('rect')
       .attr({
         x: opts.spaceFactor * cell.coords[0],
-        y: opts.spaceFactor * cell.coords[1],        
-        width: opts.spaceFactor,
-        height: opts.spaceFactor,
-        class: cell.key
+        y: opts.spaceFactor * (cell.coords[1] + rowOffset)
       });
 
-    rendition.append('text')
+    tileRenderers[cell.key](cell, tile, cellRendition, opts.spaceFactor);
+
+    cellRendition.select('text')
       .text(cell.key)
       .attr({
         x: opts.spaceFactor * (cell.coords[0] + 0.5),
-        y: opts.spaceFactor * (cell.coords[1] + 0.5), 
-      });        
+        y: opts.spaceFactor * (cell.coords[1] + 0.5 + rowOffset)
+      });
   }
 
   return {
-    renderNewCells: renderNewCells,
-    renderNewCell: renderNewCell
+    renderCells: renderCells
   };
 }

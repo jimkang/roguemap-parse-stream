@@ -22,7 +22,45 @@ g text {
   text-anchor: middle;
 }
 
+.water {
+  fill: #04b;
+}
 
+.plain {
+  fill: white;
+}
+
+.mountain {
+  fill: #321;
+}
+
+.forest {
+  fill: #3b5;
+}
+
+.town {
+  fill: #444;
+}
+
+.cave {
+  fill: lightgray;
+}
+
+.volcano {
+  fill: purple;
+}
+
+.swamp {
+  fill: #187;
+}
+
+.road {
+  fill: brown;
+}
+
+.glacier {
+  fill: #ddf;
+}
 
 a {
   font-weight: bold;
