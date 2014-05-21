@@ -100,7 +100,9 @@ function controller() {
     cell.id = 'c' + cell.coords[0] + '-' + cell.coords[1];
   }
 
-  var readStream = createXHRCharReadStream('bigmap.txt');
+  var readStream = createXHRCharReadStream(
+    'https://dl.dropboxusercontent.com/u/263768/bigmap.txt'
+  );
   var parserstream = streampack.createMapParserStream({
     batchSize: rowSize * rowsToRenderPerUpdate
   });
