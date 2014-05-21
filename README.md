@@ -60,6 +60,8 @@ Plug the file stream into the parser stream and plug the parser stream into your
 
 Now an entity will be created for each character in the map.
 
+Check out [an example](http://jimkang.com/roguemap-parse-stream/example).
+
 Tests
 -----
 
