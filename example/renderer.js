@@ -1,11 +1,17 @@
 function createRenderer(opts) {
   if (!opts.spaceFactor) {
-    opts.spaceFactor = 50;
+    opts.spaceFactor = 14;
   }
 
   var accessors = createAccessors({
     simpleAccessors: ['id', 'key']
   });
+  accessors.transform = function getTransform(d) {
+    return 'translate(' 
+      + d.coords[0] * opts.spaceFactor + ',' 
+      + (d.coords[1] + rowOffset) * opts.spaceFactor 
+      + ') scale(' + opts.spaceFactor + ')';
+  }
 
   var tileRoot = d3.select(opts.rootSelector);
   var tileMap = d3.select('#tilemap');
@@ -15,8 +21,8 @@ function createRenderer(opts) {
   var currentMapHeight = 1000;
   var tileRenderers = createTileRenderers();
 
-  function renderCells(cells) {
-    rowOffset = -cellsRenderedCount/rowSize;
+  function renderCells(cells, yOffset) {
+    rowOffset = yOffset;
 
     var cellRenditions = tileRoot.selectAll('.cell')
       .data(cells, accessors.id);
@@ -25,8 +31,10 @@ function createRenderer(opts) {
       .append('g').classed('cell', true);
 
     newCellRenditions.append('rect').attr({
-      width: opts.spaceFactor,
-      height: opts.spaceFactor
+      x: 0,
+      y: 0,
+      width: 1,
+      height: 1
     });
 
     newCellRenditions.append('text');
@@ -35,33 +43,15 @@ function createRenderer(opts) {
 
     cellRenditions.exit().remove();
 
-    cellsRenderedCount += cells.length;
-    // var neededHeight = cellsRenderedCount / opts.averageRowSize * 
-    //   opts.spaceFactor * opts.scale;
-
-    // if (neededHeight > currentMapHeight) {
-    //   currentMapHeight += 1000;
-    //   tileMap.attr('height', currentMapHeight);
-    // }
+    cellsRenderedCount += newCellRenditions.size();
   }
 
   function updateCell(cell) {
     var cellRendition = d3.select(this);
+    cellRendition.attr('transform', accessors.transform);
     
-    var tile = cellRendition.select('rect')
-      .attr({
-        x: opts.spaceFactor * cell.coords[0],
-        y: opts.spaceFactor * (cell.coords[1] + rowOffset)
-      });
-
-    tileRenderers[cell.key](cell, tile, cellRendition, opts.spaceFactor);
-
-    cellRendition.select('text')
-      .text(cell.key)
-      .attr({
-        x: opts.spaceFactor * (cell.coords[0] + 0.5),
-        y: opts.spaceFactor * (cell.coords[1] + 0.5 + rowOffset)
-      });
+    var tile = cellRendition.select('rect');
+    tileRenderers[cell.key](cell, tile, cellRendition, 1.0);
   }
 
   return {

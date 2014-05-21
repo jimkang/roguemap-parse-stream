@@ -1,8 +1,11 @@
 function controller() {
+  var rowSize = 80;
+  var rowsToRenderPerUpdate = 20;
+
   var renderer = createRenderer({
     rootSelector: '#tilemap .tileroot',
     scale: 0.2,
-    averageRowSize: 80
+    averageRowSize: rowSize
   });
 
   var cellsReceived = [];
@@ -64,22 +67,31 @@ function controller() {
     return readStream;
   }
 
-  var batchesRenderered = 0;
-  var callNextWithoutOverwhelmingBrowser = utils.space(function callNext(next) {
-    ++batchesRenderered;
-    console.log('batchesRenderered', batchesRenderered);
+  var lastCellsRendered = [];
+  var rowsRendered = 0;
+
+  function renderCellStreamChunk(cells, enc, next) {
+    cells.forEach(setUpCellId);
+    var numberOfNewRows = cells.length/rowSize;
+    var yOffset = numberOfNewRows - rowsRendered;
+    yOffset = yOffset > 0 ? 0 : yOffset;
+    renderer.renderCells(lastCellsRendered.concat(cells), yOffset);
+    lastCellsRendered = cells;
+    rowsRendered += lastCellsRendered.length/rowSize;
+    console.log('rowsRendered', rowsRendered);
+
     next();
-  }, 500);  
+  }
+
+  var renderWhenTheBrowserHasAChanceToBreathe = utils.space(
+    renderCellStreamChunk, 2000);  
 
   function createCellRenderStream() {
     var writeStream = streampack.stream.Writable({objectMode: true});
     writeStream._write = function writeCells(cells, enc, next) {
-      cells.forEach(setUpCellId);
-      renderer.renderCells(cells);
-      callNextWithoutOverwhelmingBrowser(next);
+      renderWhenTheBrowserHasAChanceToBreathe(cells, enc, next);
     };
     writeStream.end = function wrapUp() {
-      console.log('Rendered it all!');
     }
     return writeStream;
   }
@@ -90,7 +102,7 @@ function controller() {
 
   var readStream = createXHRCharReadStream('bigmap.txt');
   var parserstream = streampack.createMapParserStream({
-    batchSize: 2500
+    batchSize: rowSize * rowsToRenderPerUpdate
   });
   var renderStream = createCellRenderStream();
 

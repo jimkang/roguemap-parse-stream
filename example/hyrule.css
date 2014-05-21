@@ -27,7 +27,7 @@ g text {
 }
 
 .plain {
-  fill: white;
+  fill: hsl(120, 60%, 60%);
 }
 
 .mountain {
@@ -47,7 +47,7 @@ g text {
 }
 
 .volcano {
-  fill: rgb(223, 58, 17);
+  fill: hsl(20, 58%, 40%);
 }
 
 .swamp {

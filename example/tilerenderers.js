@@ -9,6 +9,7 @@ function createTileRenderers() {
     tile.attr({
       class: 'plain'
     });
+    
     cellRendition.append('circle').attr({
       cx: size/4,
       cy: size/4,
@@ -17,13 +18,16 @@ function createTileRenderers() {
     });
   }
 
+  var trianglePathData = d3.svg.symbol().type('triangle-up').size(0.5);
+
   function renderMountainToTile(cell, tile, cellRendition, size) {
     tile.attr({
       class: 'mountain'
     });
+
     cellRendition.append('path')
-      // .attr("transform", 'translate(' + size + "," + y(d.y) + ")"; })
-      .attr('d', d3.svg.symbol().type('triangle-up'))
+      .attr('d', trianglePathData)
+      .attr('transform', 'translate(0.5, 0.5)')
       .attr('fill', 'gray');
   }
 
@@ -31,9 +35,10 @@ function createTileRenderers() {
     tile.attr({
       class: 'forest'
     });
+
     cellRendition.append('path')
-      // .attr("transform", 'translate(' + size + "," + y(d.y) + ")"; })
-      .attr('d', d3.svg.symbol().type('triangle-up'))
+      .attr('d', trianglePathData)
+      .attr('transform', 'translate(0.5, 0.5)')
       .attr('fill', '#284');
   }
 
@@ -41,12 +46,13 @@ function createTileRenderers() {
     tile.attr({
       class: 'town'
     });
+    
     cellRendition.append('rect').attr({
       x: 0,
       y: size/2,
       width: size/3,
       height: size/3,
-      fill: 'brown'
+      fill: 'orange'
     });
 
     cellRendition.append('rect').attr({
@@ -54,7 +60,7 @@ function createTileRenderers() {
       y: size/4,
       width: size/3,
       height: size/3,
-      fill: 'brown'
+      fill: 'yellow'
     });
   }
 
@@ -64,11 +70,11 @@ function createTileRenderers() {
     });
 
     cellRendition.append('rect').attr({
-      x: size/2,
+      x: size/3,
       y: size/4,
-      width: size * 0.7,
+      width: size * 0.5,
       height: size * 0.7,
-      fill: '#444'
+      fill: '#222'
     });
   }
 
@@ -76,8 +82,10 @@ function createTileRenderers() {
     tile.attr({
       class: 'volcano'
     });
+
     cellRendition.append('path')
-      .attr('d', d3.svg.symbol().type('triangle-up'))
+      .attr('d', trianglePathData)
+      .attr('transform', 'translate(0.5, 0.5)')
       .attr('fill', 'red');
   }
 
@@ -92,10 +100,10 @@ function createTileRenderers() {
     tile.attr({
       class: 'cave'
     });
-
+ 
     cellRendition.append('rect').attr({
       x: size/2,
-      y: size/2,
+      y: 0,
       width: size/4,
       height: size,
       fill: '#888'
