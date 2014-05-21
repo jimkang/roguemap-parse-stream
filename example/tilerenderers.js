@@ -28,7 +28,7 @@ function createTileRenderers() {
     cellRendition.append('path')
       .attr('d', trianglePathData)
       .attr('transform', 'translate(0.5, 0.5)')
-      .attr('fill', 'gray');
+      .attr('fill', 'hsl(0, 0%, 80%)');
   }
 
   function renderForestToTile(cell, tile, cellRendition, size) {
@@ -39,7 +39,7 @@ function createTileRenderers() {
     cellRendition.append('path')
       .attr('d', trianglePathData)
       .attr('transform', 'translate(0.5, 0.5)')
-      .attr('fill', '#284');
+      .attr('fill', 'hsl(140, 50%, 60%)');
   }
 
   function renderTownToTile(cell, tile, cellRendition, size) {
@@ -86,7 +86,7 @@ function createTileRenderers() {
     cellRendition.append('path')
       .attr('d', trianglePathData)
       .attr('transform', 'translate(0.5, 0.5)')
-      .attr('fill', 'red');
+      .attr('fill', 'hsl(10, 60%, 80%)');
   }
 
   function renderSwampToTile(cell, tile, cellRendition, size) {

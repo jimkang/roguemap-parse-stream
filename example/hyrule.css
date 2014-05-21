@@ -22,44 +22,60 @@ g text {
   text-anchor: middle;
 }
 
+.cell rect {
+  opacity: 0.05;
+  /*stroke-opacity: 0.5;*/
+  stroke-width: 0.14;
+}
+
 .water {
   fill: #04b;
+  stroke: #04b;
 }
 
 .plain {
   fill: hsl(120, 60%, 60%);
+  stroke: hsl(120, 60%, 60%);
 }
 
 .mountain {
   fill: #6F6358;
+  stroke: #6F6358;
 }
 
 .forest {
   fill: #3b5;
+  stroke: #3b5;
 }
 
 .town {
   fill: #BA70BD;
+  stroke: #BA70BD;
 }
 
 .cave {
   fill: #3C2F2F;
+  stroke: #3C2F2F;
 }
 
 .volcano {
   fill: hsl(20, 58%, 40%);
+  stroke: hsl(20, 58%, 40%);
 }
 
 .swamp {
   fill: #187;
+  stroke: #187;
 }
 
 .road {
   fill: brown;
+  stroke: brown;
 }
 
 .glacier {
   fill: #B6DCE4;
+  stroke: #B6DCE4;
 }
 
 a {
