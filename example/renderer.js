@@ -28,7 +28,9 @@ function createRenderer(opts) {
       .data(cells, accessors.id);
 
     var newCellRenditions = cellRenditions.enter()
-      .append('g').classed('cell', true);
+      .append('g').classed('cell', true)
+      .attr('opacity', 0);
+
 
     newCellRenditions.append('rect').attr({
       x: 0,
@@ -41,17 +43,20 @@ function createRenderer(opts) {
 
     cellRenditions.each(updateCell);
 
-    cellRenditions.exit().remove();
+    cellRenditions.exit().transition().duration(300)
+      .attr('opacity', 0).remove();
 
     cellsRenderedCount += newCellRenditions.size();
   }
 
   function updateCell(cell) {
-    var cellRendition = d3.select(this);
-    cellRendition.attr('transform', accessors.transform);
-    
+    var cellRendition = d3.select(this);    
     var tile = cellRendition.select('rect');
     tileRenderers[cell.key](cell, tile, cellRendition, 1.0);
+
+    cellRendition.transition().delay(300).duration(500).ease('linear')
+      .attr('transform', accessors.transform);
+    cellRendition.transition().delay(800).duration(500).attr('opacity', 1);
   }
 
   return {
