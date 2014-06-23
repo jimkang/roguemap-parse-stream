@@ -46,6 +46,7 @@ suite('Read basic map', function basicMapSuite() {
       var Writable = require('stream').Writable;
       var checkStream = Writable({objectMode: true});
       var atLeastOneOfTheDataEventsHadTenCells = false;
+      var lastTenCellsChecked = [];
 
       checkStream._write = function checkMapCells(cells, enc, next) {
         assert.ok(Array.isArray(cells));
@@ -60,6 +61,7 @@ suite('Read basic map', function basicMapSuite() {
           assert.equal(typeof cell.coords[1], 'number');
           assert.equal(typeof cell.key, 'string');
         })
+        lastTenCellsChecked = cells;
         next();
       };
       var fileStream = fs.createReadStream(
@@ -75,6 +77,34 @@ suite('Read basic map', function basicMapSuite() {
 
       parserStream.on('end', function onParseEnd() {
         assert.ok(atLeastOneOfTheDataEventsHadTenCells);
+
+        assert.equal(lastTenCellsChecked.length, 9);
+        assert.deepEqual(lastTenCellsChecked.slice(-3), 
+          [
+            {
+              "key": "e",
+              "coords": [
+                0,
+                11232
+              ]
+            },
+            {
+              "key": "n",
+              "coords": [
+                1,
+                11232
+              ]
+            },
+            {
+              "key": "d",
+              "coords": [
+                2,
+                11232
+              ]
+            }
+          ]
+        );
+
         testDone();
       }
       .bind(this));
